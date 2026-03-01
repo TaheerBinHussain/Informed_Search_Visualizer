@@ -158,6 +158,11 @@ class PathfindingAgent:
             if curr == self.goal:
                 exec_time = int((time.time() - start_t) * 1000)
                 self.stats.config(text=f"Nodes Expanded: {nodes_expanded} | Cost: {g} | Time: {exec_time}ms")
+                
+                for node in path:
+                    if node != start_node and node != self.goal:
+                        self.canvas.itemconfig(self.rects[node], fill="green")
+                        
                 return path
 
             for n in self.get_neighbors(curr):
@@ -192,9 +197,12 @@ class PathfindingAgent:
         next_step = self.current_path.pop(0)
         
         if self.agent_pos != self.start:
-            self.canvas.itemconfig(self.rects[self.agent_pos], fill="white")
+            self.canvas.itemconfig(self.rects[self.agent_pos], fill="green")
+            
         self.agent_pos = next_step
-        self.canvas.itemconfig(self.rects[self.agent_pos], fill="green")
+        
+        if self.agent_pos != self.goal:
+            self.canvas.itemconfig(self.rects[self.agent_pos], fill="purple")
         
         if self.agent_pos == self.goal:
             messagebox.showinfo("Success", "Target Reached!")
